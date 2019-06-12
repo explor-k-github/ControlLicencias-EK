@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlLicencias", "ControlLicencias\ControlLicencias.csproj", "{C1123603-A57C-4745-8949-8CF2EE84CCC5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C1123603-A57C-4745-8949-8CF2EE84CCC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1123603-A57C-4745-8949-8CF2EE84CCC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1123603-A57C-4745-8949-8CF2EE84CCC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1123603-A57C-4745-8949-8CF2EE84CCC5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0D1CEF24-D425-44C5-93EA-9B5DCD7B38CF}
+	EndGlobalSection
+EndGlobal
