@@ -5,26 +5,37 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ControlLicencias.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace ControlLicencias.Controllers {
     public class HomeController : Controller {
         public IActionResult Index() {
+            ViewData["User"] = HttpContext.Session.GetString("User");
             return View();
         }
 
         public IActionResult About() {
-            ViewData["Message"] = "Your application description page.";
+            string isadmin = HttpContext.Session.GetString("Admin");
+            ViewData["User"] = HttpContext.Session.GetString("User");
+            if (isadmin != "true") {
+                return RedirectToAction("Index", "Home");
+            } else {
+                ViewData["Message"] = "Your application description page.";
 
-            return View();
+                return View();
+            }
+
+           
         }
 
         public IActionResult Contact() {
+            ViewData["User"] = HttpContext.Session.GetString("User");
             ViewData["Message"] = "Your contact page.";
-
             return View();
         }
 
         public IActionResult Privacy() {
+            ViewData["User"] = HttpContext.Session.GetString("User");
             return View();
         }
 

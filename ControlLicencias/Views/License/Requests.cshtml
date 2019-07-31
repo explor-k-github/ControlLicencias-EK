@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewData["Title"] = "Requests";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Licencias Solicitadas</h2>
+
+<div class="card teal lighten-5">
+    <div class="card-content">
+        <div class="row">
+            <form class="col s12">
+                <div class="row">
+                    <h4>Pendientes y por procesar</h4>
+                    <table id="table_id" class="table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Rut</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Fec Nacimiento</th>
+                                <th>Empresa</th>
+                                <th>Faena</th>
+                                <th>Accesos</th>
+                                <th>Vehiculos</th>
+                                <th>Restricciones</th>
+                                <th>Esp - Restricción</th>
+                                <th>Licencia Mun</th>
+                                <th>Licencia Anglo</th>
+                                <th>Vencimiento</th>
+                                <th>Mail Conductor</th>
+                                <th>Telefono Conductor</th>
+                                <th>Mail Empresa</th>
+                                <th>Telefono Empresa</th>
+                                <th>Fecha Acreditación</th>
+                                <th>Solicitante</th>
+                                <th>Fecha Solicitud</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{ 
+<script>
+
+    $(document).ready(function () {
+
+        var arrdata = JSON.parse('@Html.Raw(ViewData["Table1"])');
+        //var arrdatanorm = JSON.parse('@Html.Raw(ViewData["Table2"])');
+        $('#table_id').DataTable({
+            "language": {
+                "url": "lib/datatables/language/Spanish.json"
+            },
+            "data": arrdata,
+            "columns": [
+                {
+                    "data": "rut"
+                },
+                {
+                    "data": "name"
+                }
+                ,
+                {
+                    "data": "lastname"
+                }
+                ,
+                {
+                    "data": "birthdate"
+                },
+                {
+                    "data": "company.company"
+                },
+                {
+                    "data": "chore"
+                },
+                {
+                    "data": "access"
+                },
+                {
+                    "data": "vehicles"
+                },
+                {
+                    "data": "restrictions"
+                },
+                {
+                    "data": "specrest"
+                },
+                {
+                    "data": "license"
+                },
+                {
+                    "data": "anglolicense"
+                },
+                {
+                    "data": "licexpdate"
+                },
+                {
+                    "data": "drivermail"
+                },
+                {
+                    "data": "driverphone"
+                },
+                {
+                    "data": "companymail"
+                },
+                {
+                    "data": "companyphone"
+                },
+                {
+                    "data": "wcdate"
+                },
+                {
+                    "data": "solname"
+                },
+                {
+                    "data": "datereq"
+                }
+            ],
+
+
+        });
+    });
+</script>
+}

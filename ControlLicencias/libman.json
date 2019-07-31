@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "materialize@1.0.0",
+      "destination": "wwwroot/lib/materialize/"
+    },
+    {
+      "library": "select2@4.0.7",
+      "destination": "wwwroot/lib/select2/"
+    },
+    {
+      "library": "datatables@1.10.19",
+      "destination": "wwwroot/lib/datatables/"
+    },
+    {
+      "library": "moment.js@2.24.0",
+      "destination": "wwwroot/lib/moment.js/"
+    }
+  ]
+}

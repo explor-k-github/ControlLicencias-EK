@@ -1,0 +1,386 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Solicitud de Licencia</h2>
+
+<div class="row">
+    @model RequestImage
+    <form class="col s12" asp-controller="License" asp-action="UploadData" method="POST" enctype="multipart/form-data">
+        <div class="row">
+            <div class="input-field col s12">
+                <input placeholder="Juan Perez" id="solname" name="solname" type="text" class="validate" required>
+                <label for="solname">Nombre Solicitante</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <input placeholder="12345678-9" oninput="checkRut(this)" value="" maxlength="13" id="rut" name="rut" type="text" class="validate" required>
+                <label for="rut">Rut Conductor</label>
+            </div>
+            <div class="input-field col s4">
+                <select id='chore' name='chore' placeholder='Faena' required>
+                    <option disabled selected placeholder>Faena</option>
+                    <option value="lt">Las Tórtolas</option>
+                    <option value="lb">Los Bronces</option>
+                    <option value="bt">Ambas</option>
+                </select>
+            </div>
+            <a class="waves-effect waves-light btn-large" id="searchrt" name="searchrt"><i class="material-icons right">search</i>Buscar Rut</a>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s6">
+                <input placeholder="Nombres" id="name" name="name" type="text" class="validate" required>
+                <label for="first_name">Nombres</label>
+            </div>
+            <div class="input-field col s6">
+                <input placeholder="Apellidos" id="lastname" name="lastname" type="text" class="validate" required>
+                <label for="last_name">Apellidos</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s6">
+                <label>Fecha de Nacimiento</label>
+                <input id="birthdate" name="birthdate" type="date" class="datepicker" placeholder="01/01/1990" data-date-format="DD-MMM-YYYY" required>
+
+            </div>
+            <div class="input-field col s6">
+                <select id='company' name='company' placeholder='Empresa' required>
+                    <option disabled selected placeholder>Empresa</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            
+            <div class="input-field col s6">
+                <select id='access' name='access' placeholder='Accesos' required>
+                    <option disabled selected placeholder>Accesos</option>
+                    <option value="Interior Mina">Interior Mina</option>
+                    <option value="Fuera de la Mina">Fuera de la Mina</option>
+                    <option value="Ambos">Ambos</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <select id='vehicles' name='vehicles' placeholder='Tipos de Vehículo' required multiple>
+                    <option value="Camion">Camión (A4 - A5)</option>
+                    <option value="Camioneta">Camioneta (B)</option>
+                    <option value="Ambulancia">Ambulancia (A2)</option>
+                    <option value="Bus/Minibus">Bus/Minubus (A3)</option>
+                    <option value="Maquinaria Pesada">Maquinaria Pesada (D)</option>
+                </select>
+                <label>Tipos de Vehículo</label>
+            </div>
+            <div class="input-field col s6">
+                <select id='restrictions' name='restrictions' placeholder='Restricciones' required>
+                    <option value="NA" disabled selected>Restricciones</option>
+                    <option value="No Aplica">No Aplica</option>
+                    <option value="Debe Usar Lentes">Debe Usar Lentes</option>
+                    <option value="Otro">Otro, Especificar:</option>
+                </select>
+                <label>Restricciones</label>
+            </div>
+        </div>
+
+        <div class="row" id="restdesc" hidden>
+            <div class="input-field col s12">
+                <textarea id="specrest" value=" - " name="specrest" class="materialize-textarea" length="140"></textarea>
+                <label for="description">Especificaciones Restricción:</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <select id="license" name="license" placeholder="Licencia Municipal" required multiple>
+                    <option value="A1">A1</option>
+                    <option value="A2">A2</option>
+                    <option value="A3">A3</option>
+                    <option value="A4">A4</option>
+                    <option value="A5">A5</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                </select>
+                <label>Licencia Municipal</label>
+            </div>
+            <!--
+            1 : A1 2 : A2 4: A4 8: A5 16: B 32: C 64: D 128: E 256: F
+            -->
+            <div class="input-field col s6 tooltipped" data-tooltip="Licencia Angloamerican" data-position="top">
+                <select id="anglolicense" name="anglolicense" placeholder="Licencia Acreditada" required multiple>
+                    <option value="A1">A1</option>
+                    <option value="A2">A2</option>
+                    <option value="A3">A3</option>
+                    <option value="A4">A4</option>
+                    <option value="A5">A5</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                </select>
+                <label>Licencia Acreditada</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s6">
+                <label>Fecha de Vencimiento Licencia Municipal</label>
+                <input id="licexpdate" name="licexpdate" type="date" class="datepicker" data-date-format="DD-MMM-YYYY" placeholder="01/01/1990" required>
+
+            </div>
+            <div class="input-field col s6 tooltipped" data-tooltip="Foto tipo carnet de buena resolución (Mínimo de 500 pixeles de alto)" data-position="top">
+                <label>Foto</label>
+                <div class="file-field input-field">
+                    <div class="btn">
+                        <span>Seleccionar Foto</span>
+                        <input id="photo" name="photo" type="file" asp-for="photo" accept=".jpg,.jpeg,.png" required />
+                    </div>
+
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text"
+                               placeholder="Seleccionar Foto" />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <input placeholder="empleado@empresa.com" value="" id="drivermail" name="drivermail" type="text" class="validate" required>
+                <label for="email">Mail Conductor</label>
+            </div>
+            <div class="input-field col s6">
+                <input placeholder="+56987554321" value="" id="driverphone" name="driverphone" type="text" class="validate" required>
+                <label for="driverphone">Fono Conductor</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <input placeholder="empleado@empresa.com" value="" id="companymail" name="companymail" type="text" class="validate" required>
+                <label for="email">Mail Solicitante</label>
+            </div>
+            <div class="input-field col s6">
+                <input placeholder="+56229876543" value="" id="companyphone" name="companyphone" type="text" class="validate" required>
+                <label for="companyphone">Fono Empresa</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <label>Fecha de Acreditación Conducción:</label>
+                <input id="wcdate" name="wcdate" type="date" class="datepicker tooltipped" data-date-format="DD-MMM-YYYY" placeholder="01/01/1990"  data-tooltip="Este dato se obtiene desde Web Control" data-position="top" required>
+            </div>
+        </div>
+
+        <button class="btn waves-effect waves-light" type="button" id="action" name="action">
+            Enviar Solicitud
+            <i class="material-icons right">send</i>
+        </button>
+    </form>
+
+</div>
+
+<!-- Modales Mensajes  -->
+<!-- Modal Vacíos -->
+<div id="modalVoids" class="modal">
+    <div class="modal-content">
+        <h4>Faltan campos por rellenar.</h4>
+        <p>Todos los campos son requeridos en este formulario</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+    </div>
+</div>
+<div id="modalExists" class="modal">
+    <div class="modal-content">
+        <h4>Ya se ha solicitado una licencia.</h4>
+        <p>Ya existe una solicitud para el rut ingresado.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+    </div>
+</div>
+
+<!-- Modal Falta Imagen -->
+<div id="modalImage" class="modal">
+    <div class="modal-content">
+        <h4>Lo más importante.</h4>
+        <p>No se ha seleccionado una foto para la licencia.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+    </div>
+</div>
+
+<!-- Modal Almacenado Correctamente -->
+<div id="modalCorrect" class="modal">
+    <div class="modal-content">
+        <h4>Solicitud Ingresada.</h4>
+        <p>Datos Almacenados Correctamente.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="/Home/About" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+    </div>
+</div>
+
+<!-- Modal Masivo -->
+<div id="modalMasivo" class="modal">
+    <div class="modal-content">
+        <h4>El rut ingresado ya tiene Licencia.</h4>
+        <p>Solicitar Renovación?.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Renovar</a><a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+    </div>
+</div>
+
+<!-- Modal Info TOS -->
+<div id="modalTOS" class="modal">
+    <div class="modal-content">
+        <h4>Estoy De Acuerdo.</h4>
+        <ul>
+            <li>Yo <span id="sname" name="sname"></span>, soy el responsable de que los datos ingresados sean correctos.</li>
+            <li>Apartir del momento en que la solicitud es ingresada, el proceso toma aproximadamente 48h hábiles.</li>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat" name="okbtn" id="okbtn">Acepto</a><a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script src="~/js/functions.js"></script>
+    <script>
+
+        
+        document.addEventListener('DOMContentLoaded', function() {
+    /*var elemsDate = document.querySelectorAll('.datepicker');
+            var instancesDate = M.Datepicker.init(elemsDate, {
+        defaultDate: new Date(1975,1,1),
+        setDefaultDate: true,
+        selectMonths: true,
+        selectYears: 200,
+        format: "dd/mm/yyyy"
+    });*/
+            
+           
+            var elemsVeh = document.querySelectorAll('#vehicles');
+            var options = document.querySelectorAll('option');
+      var instancesVeh = M.FormSelect.init(elemsVeh, options);
+            var elemsRest = document.querySelectorAll('#restrictions');
+      var instancesRest = M.FormSelect.init(elemsRest);
+      var elemsLic = document.querySelectorAll('#license');
+      var instancesLic = M.FormSelect.init(elemsLic);
+      var elemsAlic = document.querySelectorAll('#anglolicense');
+            var instancesAlic = M.FormSelect.init(elemsAlic);
+            
+      
+        });
+
+
+
+
+    $(document).ready(function () {
+            $("#specrest").val(" - ");
+            $('#company').sm_select({ data:@Html.Raw(ViewData["selectComp"])});
+            $('#chore').sm_select();
+            $('#access').sm_select();
+            $('.tooltipped').tooltip();
+            $('.modal').modal();
+            $("#specrest").val(" - ");
+
+        });
+
+         $(document).ready(function () {
+            $('#restrictions').change(function () {
+                var job = $('#restrictions').val();
+                if (job == "Otro") {
+                    $("#restdesc").show();
+                } else {
+                    $("#restdesc").hide();
+                     $("#specrest").val(" - ");
+                }
+            })
+        });
+
+
+        $("#action").on("click", function () {
+             var instance = M.Modal.getInstance($("#modalTOS"));
+                    instance.open();
+        });
+
+    $("#okbtn").on("click", function () {
+        sendData();
+    });
+
+    $("#searchrt").on("click", function () {
+        var objt = document.getElementById("rut");
+            if ($("#chore").val() == null) {
+                M.toast({ html: 'Seleccione Una Faena' });
+            } else {
+                if (objt.checkValidity()) {
+                    consultaRut();
+                } else {
+                    M.toast({ html: 'Ingrese un Rut Válido' });
+                }
+            }
+
+        });
+
+
+        function sendData() {
+            var felement = document.querySelector("form");
+            var form = new FormData(felement);
+
+
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": "/License/UploadData",
+                "method": "POST",
+                "processData": false,
+                "contentType": false,
+                "mimeType": "multipart/form-data",
+                "data": form
+            }
+
+            $.ajax(settings).done(function (response) {
+                $("#sname").text($("#solname").val());
+                if (response == "NOIMG") {
+                    var instance = M.Modal.getInstance($("#modalImage"));
+                    instance.open();
+                }
+                if (response == "OK") {
+                    var instance = M.Modal.getInstance($("#modalCorrect"));
+                    instance.open();
+                }
+                if (response == "EXISTS") {
+                    var instance = M.Modal.getInstance($("#modalExists"));
+                    instance.open();
+                }
+                if (response == "MASIVO") {
+                    var instance = M.Modal.getInstance($("#modalMasivo"));
+                    instance.open();
+                }
+                console.log(response);
+            }).fail(function (response) {
+                var instance = M.Modal.getInstance($("#modalVoids"));
+                    instance.open();
+            });
+        }
+
+         
+
+
+    </script>
+
+}
