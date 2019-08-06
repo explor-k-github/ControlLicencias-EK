@@ -8,7 +8,7 @@
 
 <div class="row">
     @model RequestImage
-    <form class="col s12" asp-controller="License" asp-action="UploadData" method="POST" enctype="multipart/form-data">
+    <form class="col s12" id="form" name="form" asp-controller="License" asp-action="UploadData" method="POST" enctype="multipart/form-data">
         <div class="row">
             <div class="input-field col s12">
                 <input placeholder="Juan Perez" id="solname" name="solname" type="text" class="validate" required>
@@ -55,7 +55,7 @@
             </div>
         </div>
         <div class="row">
-            
+
             <div class="input-field col s6">
                 <select id='access' name='access' placeholder='Accesos' required>
                     <option disabled selected placeholder>Accesos</option>
@@ -175,7 +175,7 @@
         <div class="row">
             <div class="input-field col s12">
                 <label>Fecha de Acreditación Conducción:</label>
-                <input id="wcdate" name="wcdate" type="date" class="datepicker tooltipped" data-date-format="DD-MMM-YYYY" placeholder="01/01/1990"  data-tooltip="Este dato se obtiene desde Web Control" data-position="top" required>
+                <input id="wcdate" name="wcdate" type="date" class="datepicker tooltipped" data-date-format="DD-MMM-YYYY" placeholder="01/01/1990" data-tooltip="Este dato se obtiene desde Web Control" data-position="top" required>
             </div>
         </div>
 
@@ -255,24 +255,102 @@
     </div>
 </div>
 
+<!-- Modal Loading -->
+
+<div id="modalLoadingwc" class="modal">
+    <div class="modal-content">
+        <h5>Espere un momento mientras procesamos su información.</h5>
+        <div class="progress">
+            <div class="indeterminate"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Errors -->
+<div id="modalErrors" class="modal">
+    <div class="modal-content">
+        <h5>Status en WebControl</h5>
+
+        <ul class="collection">
+            <li class="collection-item avatar" name="twochore" id="twochore">
+                <p>
+                    <span>Los Bronces</span>
+                    <span class="inforight">Las Tórtolas</span>
+                </p>
+            </li>
+            <li class="collection-item avatar">
+                <i name="forma1" id="forma1" class="material-icons circle red">folder</i>
+                <span class="title">Formulario A1</span>
+                <p>
+                    <span id="infoa1" name="infoa1"></span>
+                    <span id="infoa1lt" name="infoa1lt" class="inforight"></span>
+                </p>
+                <a href="#!" class="secondary-content">
+                    <i name="forma1lt" id="forma1lt" class="material-icons circle red dotright">folder</i>
+                </a>
+            </li>
+            <li class="collection-item avatar">
+                <i name="altamo" id="altamo" class="material-icons circle green">filter_hdr</i>
+                <span class="title">Alta Montaña</span>
+                <p>
+                    <span id="highmountm" name="highmountm"></span>
+                    <span id="highmountmlt" name="highmountmlt" class="inforight"></span>
+                </p>
+                <a href="#!" class="secondary-content">
+                    <i name="altamolt" id="altamolt" class="material-icons circle green dotright">filter_hdr</i>
+                </a>
+            </li>
+            <li class="collection-item avatar">
+                <i name="licen" id="licen" class="material-icons circle red">chrome_reader_mode</i>
+                <span class="title">Licencia de Conducir</span>
+                <p>
+                    <span id="licensem" name="licensem"></span>
+                    <span id="licensemlt" name="licensemlt" class="inforight"></span>
+                </p>
+                <a href="#!" class="secondary-content">
+                    <i name="licenlt" id="licenlt" class="material-icons circle red dotright">chrome_reader_mode</i>
+                </a>
+            </li>
+            <li class="collection-item avatar" name="routesx" id="routesx">
+                <i name="rutasa" id="rutasa" class="material-icons circle green">commute</i>
+                <span class="title">Curso G21 G245</span>
+                <p>
+                    <span id="routesm" name="routesm"></span>
+                    <span id="routesmlt" name="routesmlt" class="inforight">No Aplica</span>
+                </p>
+                <a href="#!" class="secondary-content">
+                    <i name="routelt" id="routelt" class="material-icons circle grey lighten-1 dotright">commute</i>
+                </a>
+            </li>
+            <li class="collection-item avatar">
+                <i name="psicos" id="psicos" class="material-icons circle red">swap_calls</i>
+                <span class="title">Psicosensotécnico</span>
+                <p>
+                    <span id="psicom" name="psicom"></span>
+                    <span id="psicomlt" name="psicomlt" class="inforight"></span>
+                </p>
+                <a href="#!" class="secondary-content">
+                    <i name="psicoslt" id="psicoslt" class="material-icons circle red dotright">swap_calls</i>
+                </a>
+            </li>
+        </ul>
+    * Ignorar en
+    </div>
+
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat" name="okwc" id="okwc">Continuar</a>
+    </div>
+</div>
+
 
 
 @section Scripts{
     <script src="~/js/functions.js"></script>
     <script>
 
-        
+
         document.addEventListener('DOMContentLoaded', function() {
-    /*var elemsDate = document.querySelectorAll('.datepicker');
-            var instancesDate = M.Datepicker.init(elemsDate, {
-        defaultDate: new Date(1975,1,1),
-        setDefaultDate: true,
-        selectMonths: true,
-        selectYears: 200,
-        format: "dd/mm/yyyy"
-    });*/
-            
-           
+
             var elemsVeh = document.querySelectorAll('#vehicles');
             var options = document.querySelectorAll('option');
       var instancesVeh = M.FormSelect.init(elemsVeh, options);
@@ -282,8 +360,8 @@
       var instancesLic = M.FormSelect.init(elemsLic);
       var elemsAlic = document.querySelectorAll('#anglolicense');
             var instancesAlic = M.FormSelect.init(elemsAlic);
-            
-      
+
+
         });
 
 
@@ -297,7 +375,6 @@
             $('.tooltipped').tooltip();
             $('.modal').modal();
             $("#specrest").val(" - ");
-
         });
 
          $(document).ready(function () {
@@ -313,13 +390,15 @@
         });
 
 
-        $("#action").on("click", function () {
+    $("#action").on("click", function () {
+             $("#sname").text($("#solname").val());
              var instance = M.Modal.getInstance($("#modalTOS"));
                     instance.open();
         });
 
     $("#okbtn").on("click", function () {
-        sendData();
+        test2();
+        testing();
     });
 
     $("#searchrt").on("click", function () {
@@ -378,7 +457,318 @@
             });
         }
 
-         
+
+    function testing() {
+        var instancehh = M.Modal.getInstance($("#modalLoadingwc"));
+        instancehh.open();
+        var rut = $("#rut").val();
+        var chr = $("#chore").val();
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url":"../api/License/LicenseChecker",
+            "method": "POST",
+              "headers": {
+    "Content-Type": "application/json",
+    "User-Agent": "PostmanRuntime/7.15.2",
+    "Accept": "*/*",
+    "Cache-Control": "no-cache",
+    "Postman-Token": "f760b6fd-72e3-4148-99b6-2b91a4bae9a7,f8952902-0ebe-40b5-9d84-54717a1c0e8e",
+    "Host": "localhost:44382",
+    "Accept-Encoding": "gzip, deflate",
+    "Content-Length": "20",
+    "Connection": "keep-alive",
+    "cache-control": "no-cache"
+  },
+            "processData": false,
+            "data": "{\"rut\":\""+rut+"\", \"chore\":\""+chr+"\"}"
+        }
+
+        $.ajax(settings).done(function (response) {
+            instancehh.close();
+            console.log(response);
+            if (chr == "lb") { 
+                $('#twochore').hide();
+                if (response.Aon == "True") {
+                $('#forma1').removeClass('red').addClass('green');
+                    $('#infoa1').text("Activo");
+                } else {
+                $('#forma1').removeClass('green').addClass('red');
+                    $('#infoa1').text("Inexistente");
+                }
+                if (response.Alt == "True") {
+                    $('#altamo').removeClass('red').addClass('green');
+                    $('#highmountm').text("Activo");
+                } else {
+                    $('#altamo').removeClass('green').addClass('red');
+                    $('#highmountm').text("Inexistente");
+                }
+                if (response.Lic == "True") {
+                    $('#licen').removeClass('red').addClass('green');
+                    $('#licensem').text("Activo");
+                } else {
+                    $('#licen').removeClass('green').addClass('red');
+                    $('#licensem').text("Vencida o Invalidada");
+                }
+                $('#rutasa').show();
+                $('#routesm').show();
+                $('#routesx').show();
+                if (response.G21 == "True") {
+                    $('#rutasa').removeClass('red').addClass('green');
+                    $('#routesm').text("Activo");
+                } else {
+                    $('#rutasa').removeClass('green').addClass('red');
+                    $('#routesm').text("Inexistente");
+                }
+                if (response.Psi == "True") {
+                    $('#psicos').removeClass('red').addClass('green');
+                    $('#psicom').text("Activo");
+                } else {
+                    $('#psicos').removeClass('green').addClass('red');
+                    $('#psicom').text("Vencido o Invalidado");
+                }
+                if (response.Aon == "True" && response.Alt == "True" && response.Lic == "True" && response.G21 == "True" && response.Psi == "True") {
+                    var instance = M.Modal.getInstance($("#modalErrors"));
+                    instance.open();
+                    sendData();
+                } else {
+                    var instance = M.Modal.getInstance($("#modalErrors"));
+                    instance.open();
+                }
+            }
+            if (chr == "lt") {
+                $('#twochore').hide();
+                if (response.Aon == "True") {
+                    $('#forma1').removeClass('red').addClass('green');
+                    $('#infoa1').text("Activo");
+                } else {
+                    $('#forma1').removeClass('green').addClass('red');
+                    $('#infoa1').text("Inexistente");
+                }
+                if (response.Alt == "True") {
+                    $('#altamo').removeClass('red').addClass('green');
+                    $('#highmountm').text("Activo");
+                } else {
+                    $('#altamo').removeClass('green').addClass('red');
+                    $('#highmountm').text("Inexistente");
+                }
+                if (response.Lic == "True") {
+                    $('#licen').removeClass('red').addClass('green');
+                    $('#licensem').text("Activo");
+                } else {
+                    $('#licen').removeClass('green').addClass('red');
+                    $('#licensem').text("Vencida o Invalidada");
+                }
+                    $('#rutasa').hide();
+                    $('#routesm').hide();
+                    $('#routesx').hide();
+
+                if (response.Psi == "True") {
+                    $('#psicos').removeClass('red').addClass('green');
+                    $('#psicom').text("Activo");
+                } else {
+                    $('#psicos').removeClass('green').addClass('red');
+                    $('#psicom').text("Vencido o Invalidado");
+                }
+                if (response.Aon == "True" && response.Alt == "True" && response.Lic == "True" && response.Psi == "True") {
+                    var instance = M.Modal.getInstance($("#modalErrors"));
+                    instance.open();
+                    sendData();
+                } else {
+                    var instance = M.Modal.getInstance($("#modalErrors"));
+                    instance.open();
+                }
+            }
+            if (chr == "bt") {
+                $('#twochore').show();
+                if (response.Aon == "True") {
+                    $('#forma1').removeClass('red').addClass('green');
+                    $('#infoa1').text("Activo");
+                } else {
+                    $('#forma1').removeClass('green').addClass('red');
+                    $('#infoa1').text("Inexistente");
+                }
+                if (response.Alt == "True") {
+                    $('#altamo').removeClass('red').addClass('green');
+                    $('#highmountm').text("Activo");
+                } else {
+                    $('#altamo').removeClass('green').addClass('red');
+                    $('#highmountm').text("Inexistente");
+                }
+                if (response.Lic == "True") {
+                    $('#licen').removeClass('red').addClass('green');
+                    $('#licensem').text("Activo");
+                } else {
+                    $('#licen').removeClass('green').addClass('red');
+                    $('#licensem').text("Vencida o Invalidada");
+                }
+                    $('#rutasa').hide();
+                    $('#routesm').hide();
+                    $('#routesx').hide();
+
+                if (response.Psi == "True") {
+                    $('#psicos').removeClass('red').addClass('green');
+                    $('#psicom').text("Activo");
+                } else {
+                    $('#psicos').removeClass('green').addClass('red');
+                    $('#psicom').text("Vencido o Invalidado");
+                }
+                                $('#twochore').show();
+                if (response.Aonlt == "True") {
+                    $('#forma1lt').removeClass('red').addClass('green');
+                    $('#infoa1lt').text("Activo");
+                } else {
+                    $('#forma1lt').removeClass('green').addClass('red');
+                    $('#infoa1lt').text("Inexistente");
+                }
+                if (response.Altlt == "True") {
+                    $('#altamolt').removeClass('red').addClass('green');
+                    $('#highmountmlt').text("Activo");
+                } else {
+                    $('#altamolt').removeClass('green').addClass('red');
+                    $('#highmountmlt').text("Inexistente");
+                }
+                if (response.Liclt == "True") {
+                    $('#licenlt').removeClass('red').addClass('green');
+                    $('#licensemlt').text("Activo");
+                } else {
+                    $('#licenlt').removeClass('green').addClass('red');
+                    $('#licensemlt').text("Vencida o Invalidada");
+                }
+                $('#rutasa').show();
+                $('#routesm').show();
+                $('#routesx').show();
+
+                if (response.Psilt == "True") {
+                    $('#psicoslt').removeClass('red').addClass('green');
+                    $('#psicomlt').text("Activo");
+                } else {
+                    $('#psicoslt').removeClass('green').addClass('red');
+                    $('#psicomlt').text("Vencido o Invalidado");
+                }
+                if (response.Aonlt == "True" && response.Altlt == "True" && response.Liclt == "True" && response.Psilt == "True" && response.Aon == "True" && response.Alt == "True" && response.Lic == "True" && response.G21 == "True" && response.Psi == "True") {
+                    var instance = M.Modal.getInstance($("#modalErrors"));
+                    instance.open();
+                    sendData();
+                } else {
+                    var instance = M.Modal.getInstance($("#modalErrors"));
+                    instance.open();
+                }
+            }
+            
+            
+        });
+
+
+        
+    }
+
+
+    function objectifyForm(formArray) {//serialize data function
+
+  var returnArray = {};
+  for (var i = 0; i < formArray.length; i++){
+    returnArray[formArray[i]['name']] = formArray[i]['value'];
+  }
+  return returnArray;
+            }
+
+    (function($){
+    $.fn.serializeObject = function(){
+
+        var self = this,
+            json = {},
+            push_counters = {},
+            patterns = {
+                "validate": /^[a-zA-Z][a-zA-Z0-9_]*(?:\[(?:\d*|[a-zA-Z0-9_]+)\])*$/,
+                "key":      /[a-zA-Z0-9_]+|(?=\[\])/g,
+                "push":     /^$/,
+                "fixed":    /^\d+$/,
+                "named":    /^[a-zA-Z0-9_]+$/
+            };
+
+
+        this.build = function(base, key, value){
+            base[key] = value;
+            return base;
+        };
+
+        this.push_counter = function(key){
+            if(push_counters[key] === undefined){
+                push_counters[key] = 0;
+            }
+            return push_counters[key]++;
+        };
+
+        $.each($(this).serializeArray(), function(){
+
+            // skip invalid keys
+            if(!patterns.validate.test(this.name)){
+                return;
+            }
+
+            var k,
+                keys = this.name.match(patterns.key),
+                merge = this.value,
+                reverse_key = this.name;
+
+            while((k = keys.pop()) !== undefined){
+
+                // adjust reverse_key
+                reverse_key = reverse_key.replace(new RegExp("\\[" + k + "\\]$"), '');
+
+                // push
+                if(k.match(patterns.push)){
+                    merge = self.build([], self.push_counter(reverse_key), merge);
+                }
+
+                // fixed
+                else if(k.match(patterns.fixed)){
+                    merge = self.build([], k, merge);
+                }
+
+                // named
+                else if(k.match(patterns.named)){
+                    merge = self.build({}, k, merge);
+                }
+            }
+
+            json = $.extend(true, json, merge);
+        });
+
+        return json;
+    };
+})(jQuery);
+
+
+    function test2() {
+        var formarr = $('#form').serializeObject();
+        console.log(formarr);
+        var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "../api/License/UploadBackup",
+  "method": "POST",
+  "headers": {
+    "Content-Type": "application/json",
+    "User-Agent": "PostmanRuntime/7.15.2",
+    "Accept": "*/*",
+    "Cache-Control": "no-cache",
+    "Postman-Token": "69f49763-890b-4093-9f46-8f655d0accbb,5f6f1a24-00f8-4541-b342-ea68570234a7",
+    "Host": "localhost:44382",
+    "Accept-Encoding": "gzip, deflate",
+    "Content-Length": "16",
+    "Connection": "keep-alive",
+    "cache-control": "no-cache"
+  },
+            "processData": false,
+            "data": JSON.stringify(formarr)
+}
+
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
+    }
 
 
     </script>

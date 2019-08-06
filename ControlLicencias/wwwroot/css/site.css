@@ -48,3 +48,13 @@ main {
 .anblue {
     background-color: #002776 !important;
 }
+
+.dotright {
+    left: -36px !important;
+    bottom: -36px !important;
+}
+
+.inforight {
+    float: right;
+    margin-right: 90px;
+}

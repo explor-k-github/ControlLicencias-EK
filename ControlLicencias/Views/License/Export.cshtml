@@ -4,5 +4,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Export</h2>
+<h2>Exportar Listos para Imprimir</h2>
+<h4>Este listado contiene los datos de @ViewData["Regs"] solicitudes.</h4>
+<a name="download" id="download" href="@ViewData["File"]" class="waves-effect waves-light btn">Descargar Archivo<i class="material-icons right">get_app</i></a>
 
+@section  Scripts{ 
+
+<script>
+    $("#download").on("click", function () {
+
+    });
+</script>
+
+}

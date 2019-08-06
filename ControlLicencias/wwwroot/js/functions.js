@@ -8,8 +8,10 @@
     cuerpo = valor.slice(0, -1);
     dv = valor.slice(-1).toUpperCase();
 
+    
+
     // Formatear RUN
-    //rut.value = cuerpo + dv;
+    rut.value = cuerpo + dv;
    
 
     // Si no cumple con el mínimo ej. (n.nnn.nnn)

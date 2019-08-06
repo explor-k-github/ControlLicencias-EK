@@ -26,9 +26,10 @@ namespace ControlLicencias.Models {
         public string companyphone;
         public DateTime wcdate;
         public string solname;
+        public string ticket;
         public DateTime datereq;
 
-        public Request(string id, string rut, string name, string lastname, DateTime birthdate, Company company, string chore, string access, string vehicles, string restrictions, string specrest, string license, string anglolicense, DateTime licexpdate, string photo, string drivermail, string driverphone, string companymail, string companyphone, DateTime wcdate, string solname) {
+        public Request(string id, string rut, string name, string lastname, DateTime birthdate, Company company, string chore, string access, string vehicles, string restrictions, string specrest, string license, string anglolicense, DateTime licexpdate, string photo, string drivermail, string driverphone, string companymail, string companyphone, DateTime wcdate, string solname, string ticket) {
             this.id = id ?? throw new ArgumentNullException(nameof(id));
             this.rut = rut ?? throw new ArgumentNullException(nameof(rut));
             this.name = name ?? throw new ArgumentNullException(nameof(name));
@@ -49,6 +50,7 @@ namespace ControlLicencias.Models {
             this.companymail = companymail ?? throw new ArgumentNullException(nameof(companymail));
             this.companyphone = companyphone ?? throw new ArgumentNullException(nameof(companyphone));
             this.wcdate = wcdate;
+            this.ticket = ticket ?? throw new ArgumentNullException(nameof(ticket));
             this.solname = solname ?? throw new ArgumentNullException(nameof(solname));
         }
 
@@ -87,7 +89,7 @@ namespace ControlLicencias.Models {
             string birth = birthdate.ToString("yyyy-MM-dd");
             string exp = licexpdate.ToString("yyyy-MM-dd");
             string wc = wcdate.ToString("yyyy-MM-dd");
-            string query = "INSERT INTO `requests` (`id`, `rut`, `name`, `lastname`, `birthdate`, `company`, `chore`, `access`, `vehicles`, `restrictions`, `specrest`, `license`, `anglolicense`, `licexpdate`, `photo`, `drivermail`, `driverphone`, `companymail`, `companyphone`, `wcdate`, `solname`) VALUES (NULL, '"+this.rut+"', '"+this.name+"', '"+this.lastname+"', '"+birth+"', '"+this.company.id+"', '"+this.chore+"', '"+this.access+"', '"+this.vehicles+"', '"+this.restrictions+"','" + this.specrest + "', '"+this.license+"', '"+this.anglolicense+"', '"+exp+"', '"+this.photo+"', '"+this.drivermail+"', '"+this.driverphone+"', '"+this.companymail+"', '"+this.companyphone+"', '"+wc+"', '"+this.solname+"')";
+            string query = "INSERT INTO `requests` (`id`, `rut`, `name`, `lastname`, `birthdate`, `company`, `chore`, `access`, `vehicles`, `restrictions`, `specrest`, `license`, `anglolicense`, `licexpdate`, `photo`, `drivermail`, `driverphone`, `companymail`, `companyphone`, `wcdate`, `solname`, `status`, `ticket` ) VALUES (NULL, '"+this.rut+"', '"+this.name+"', '"+this.lastname+"', '"+birth+"', '"+this.company.id+"', '"+this.chore+"', '"+this.access+"', '"+this.vehicles+"', '"+this.restrictions+"','" + this.specrest + "', '"+this.license+"', '"+this.anglolicense+"', '"+exp+"', '"+this.photo+"', '"+this.drivermail+"', '"+this.driverphone+"', '"+this.companymail+"', '"+this.companyphone+"', '"+wc+"', '"+this.solname+"', 'Ingesado', '"+this.ticket+"')";
             bool status = db.Modify(query);
             db.CloseConnection();
             return status;
@@ -105,8 +107,8 @@ namespace ControlLicencias.Models {
                 try {
                     Company cx = new Company();
                     cx.GetCompany(int.Parse(xd.GetString(5)));
-                    caux = new Request(xd.GetString(0), xd.GetString(1), xd.GetString(2), xd.GetString(3), xd.GetDateTime(4),cx, xd.GetString(6), xd.GetString(7), xd.GetString(8), xd.GetString(9), xd.GetString(10), xd.GetString(11), xd.GetString(12), xd.GetDateTime(13), xd.GetString(14), xd.GetString(15), xd.GetString(16), xd.GetString(17), xd.GetString(18), xd.GetDateTime(19), xd.GetString(20));
-                    caux.datereq = xd.GetDateTime(21);
+                    caux = new Request(xd.GetString(0), xd.GetString(1), xd.GetString(2), xd.GetString(3), xd.GetDateTime(4),cx, xd.GetString(6), xd.GetString(7), xd.GetString(8), xd.GetString(9), xd.GetString(10), xd.GetString(11), xd.GetString(12), xd.GetDateTime(13), xd.GetString(14), xd.GetString(15), xd.GetString(16), xd.GetString(17), xd.GetString(18), xd.GetDateTime(19), xd.GetString(20), xd.GetString(22));
+                    caux.datereq = xd.GetDateTime(23);
                     return true;
                 } catch (Exception e) {
                     Console.WriteLine("ERROR: " + e);
@@ -127,8 +129,8 @@ namespace ControlLicencias.Models {
                 try {
                     // Company cx = new Company();
                     // cx.GetCompany(int.Parse(xd.GetString(5)));
-                    aux = new Request(xd.GetString(0), xd.GetString(1), xd.GetString(2), xd.GetString(3), xd.GetDateTime(4), new Company().GetCompany(int.Parse(xd.GetString(5))), xd.GetString(6), xd.GetString(7), xd.GetString(8), xd.GetString(9), xd.GetString(10), xd.GetString(11), xd.GetString(12), xd.GetDateTime(13), xd.GetString(14), xd.GetString(15), xd.GetString(16), xd.GetString(17), xd.GetString(18), xd.GetDateTime(19), xd.GetString(20));
-                    aux.datereq = xd.GetDateTime(21);
+                    aux = new Request(xd.GetString(0), xd.GetString(1), xd.GetString(2), xd.GetString(3), xd.GetDateTime(4), new Company().GetCompany(int.Parse(xd.GetString(5))), xd.GetString(6), xd.GetString(7), xd.GetString(8), xd.GetString(9), xd.GetString(10), xd.GetString(11), xd.GetString(12), xd.GetDateTime(13), xd.GetString(14), xd.GetString(15), xd.GetString(16), xd.GetString(17), xd.GetString(18), xd.GetDateTime(19), xd.GetString(20), xd.GetString(22));
+                    aux.datereq = xd.GetDateTime(23);
                     requests.Add(aux);
                 } catch (Exception e) {
                     Console.WriteLine("Error: " + e);
@@ -138,5 +140,47 @@ namespace ControlLicencias.Models {
             return requests;
         }
 
+
+        public List<Request> GetInRequests() {
+            List<Request> requests = new List<Request>();
+            Database db = new Database();
+            string query = "SELECT * FROM `requests` WHERE status = 'Ingresado';";
+            var xd = db.Select(query);
+            Request aux = new Request();
+            while (xd.Read()) {
+                try {
+                    // Company cx = new Company();
+                    // cx.GetCompany(int.Parse(xd.GetString(5)));
+                    aux = new Request(xd.GetString(0), xd.GetString(1), xd.GetString(2), xd.GetString(3), xd.GetDateTime(4), new Company().GetCompany(int.Parse(xd.GetString(5))), xd.GetString(6), xd.GetString(7), xd.GetString(8), xd.GetString(9), xd.GetString(10), xd.GetString(11), xd.GetString(12), xd.GetDateTime(13), xd.GetString(14), xd.GetString(15), xd.GetString(16), xd.GetString(17), xd.GetString(18), xd.GetDateTime(19), xd.GetString(20), xd.GetString(22));
+                    aux.datereq = xd.GetDateTime(23);
+                    requests.Add(aux);
+                } catch (Exception e) {
+                    Console.WriteLine("Error: " + e);
+                }
+
+            }
+            return requests;
+        }
+
+        public bool MarkRequests() {
+            List<Request> requests = new List<Request>();
+            Database db = new Database();
+            string query = "UPDATE `requests` SET status = 'Impresion' WHERE status = 'Ingresado';";
+            bool xd = db.Modify(query);
+            /*Request aux = new Request();
+            while (xd.Read()) {
+                try {
+                    // Company cx = new Company();
+                    // cx.GetCompany(int.Parse(xd.GetString(5)));
+                    aux = new Request(xd.GetString(0), xd.GetString(1), xd.GetString(2), xd.GetString(3), xd.GetDateTime(4), new Company().GetCompany(int.Parse(xd.GetString(5))), xd.GetString(6), xd.GetString(7), xd.GetString(8), xd.GetString(9), xd.GetString(10), xd.GetString(11), xd.GetString(12), xd.GetDateTime(13), xd.GetString(14), xd.GetString(15), xd.GetString(16), xd.GetString(17), xd.GetString(18), xd.GetDateTime(19), xd.GetString(20), xd.GetString(22));
+                    aux.datereq = xd.GetDateTime(23);
+                    requests.Add(aux);
+                } catch (Exception e) {
+                    Console.WriteLine("Error: " + e);
+                }
+
+            }*/
+            return xd;
+        }
     }
 }

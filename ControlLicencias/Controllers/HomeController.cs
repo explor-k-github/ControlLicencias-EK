@@ -6,10 +6,22 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ControlLicencias.Models;
 using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace ControlLicencias.Controllers {
     public class HomeController : Controller {
         public IActionResult Index() {
+            try {
+                // Only get files that begin with the letter "c".
+                string[] dirs = Directory.GetFiles(@"/var/www/html/imgs/data/", "*");
+                Console.WriteLine("The number of files starting with c is {0}.", dirs.Length);
+                foreach (string dir in dirs) {
+                    Console.WriteLine(dir);
+                }
+            } catch (Exception e) {
+                Console.WriteLine("The process failed: {0}", e.ToString());
+            }
+
             ViewData["User"] = HttpContext.Session.GetString("User");
             return View();
         }
