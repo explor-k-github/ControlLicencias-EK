@@ -167,6 +167,16 @@ namespace ControlLicencias.Controllers
             } else {
                 if (chore.Contains("lb")) {
                     string data = wc.DownloadString("http://35.199.124.107:3000/api/rut/" + rut + "/lb");
+                    if (data.Contains("No hay registros en la faena consultada") || data.Contains("El Rut No se encuentra")) {
+                        JObject resbadlb = new JObject();
+                        resbadlb.Add("Acc", "False");
+                        resbadlb.Add("Lic", "False");
+                        resbadlb.Add("Psi", "False");
+                        resbadlb.Add("Alt", "False");
+                        // results.Add("G21", g21.ToString());
+                        resbadlb.Add("Aon", "False");
+                        return resbadlb;
+                    }
                     JObject job = JObject.Parse(data);
                     dynamic json = job;
                     string psico = json.Psico + "";
@@ -281,7 +291,18 @@ namespace ControlLicencias.Controllers
                 if (chore.Contains("lt")) {
                     //LT DOESNT HAVE G21
                     string data = wc.DownloadString("http://35.199.124.107:3000/api/rut/" + rut + "/lt");
+                    if(data.Contains("No hay registros en la faena consultada")||data.Contains("El Rut No se encuentra")) {
+                        JObject resbadlt = new JObject();
+                        resbadlt.Add("Acc", "False");
+                        resbadlt.Add("Lic", "False");
+                        resbadlt.Add("Psi", "False");
+                        resbadlt.Add("Alt", "False");
+                        // results.Add("G21", g21.ToString());
+                        resbadlt.Add("Aon", "False");
+                        return resbadlt;
+                    }
                     JObject job = JObject.Parse(data);
+                    
                     dynamic json = job;
                     string psico = json.Psico + "";
                     string license = json.License + "";
@@ -396,7 +417,19 @@ namespace ControlLicencias.Controllers
                     return results;
                 }
                 if (chore.Contains("bt")) {
+                    JObject results = new JObject();
+                    //JObject resbad = new JObject();
                     string data = wc.DownloadString("http://35.199.124.107:3000/api/rut/" + rut + "/lb");
+                    if (data.Contains("No hay registros en la faena consultada") || data.Contains("El Rut No se encuentra")) {
+                        
+                        results.Add("Acc", "False");
+                        results.Add("Lic", "False");
+                        results.Add("Psi", "False");
+                        results.Add("Alt", "False");
+                        // results.Add("G21", g21.ToString());
+                        results.Add("Aon", "False");
+                        goto lastortolas;
+                    }
                     JObject job = JObject.Parse(data);
                     dynamic json = job;
                     string psico = json.Psico + "";
@@ -499,7 +532,7 @@ namespace ControlLicencias.Controllers
                     Console.WriteLine("Alt: " + alt.ToString());
                     Console.WriteLine("G21: " + g21.ToString());
                     Console.WriteLine("A1: " + aun.ToString());
-                    JObject results = new JObject();
+                    
                     results.Add("Acc", acc.ToString());
                     results.Add("Lic", lic.ToString());
                     results.Add("Psi", psi.ToString());
@@ -508,24 +541,34 @@ namespace ControlLicencias.Controllers
                     results.Add("Aon", aun.ToString());
                     //CHECK LT
                     //LT DOESNT HAVE G21
+                   lastortolas:
                     string datalt = wc.DownloadString("http://35.199.124.107:3000/api/rut/" + rut + "/lt");
+                    if (datalt.Contains("No hay registros en la faena consultada") || data.Contains("El Rut No se encuentra")) {
+                        results.Add("Acclt", "False");
+                        results.Add("Liclt", "False");
+                        results.Add("Psilt", "False");
+                        results.Add("Altlt", "False");
+                        // results.Add("G21", g21.ToString());
+                        results.Add("Aonlt", "False");
+                        return results;
+                    }
                     JObject joblt = JObject.Parse(data);
-                    dynamic jsonlt = job;
-                    string psicolt = json.Psico + "";
-                    string licenselt = json.License + "";
-                    string altamonlt = json.HighMountain + "";
-                    string aonelt = json.A1 + "";
+                    dynamic jsonlt = joblt;
+                    string psicolt = jsonlt.Psico + "";
+                    string licenselt = jsonlt.License + "";
+                    string altamonlt = jsonlt.HighMountain + "";
+                    string aonelt = jsonlt.A1 + "";
                     // string g2145 = json.G21G245 + "";
-                    string lifeplt = json.LifePaper + "";
+                    string lifeplt = jsonlt.LifePaper + "";
                     //Console.WriteLine(">>>" + aone);
 
                     //Date licen
                     string expliclt = "01-01-1999";
-                    string explicenselt = json.ExpLicense + "";
+                    string explicenselt = jsonlt.ExpLicense + "";
                     if (explicenselt != "" && string.IsNullOrWhiteSpace(explicenselt) == false && licenselt.Contains("rue")) {
                         string exlilt = explicenselt;
                         expliclt = buildDate(exlilt);
-                    } else if (json.LicenseType != "" && licenselt.Contains("rue")) {
+                    } else if (jsonlt.LicenseType != "" && licenselt.Contains("rue")) {
                         string exlilt = jsonlt.LicenseType + "";
                         exlilt = exlilt.Replace("&nbsp;", "");
                         explic = buildDate(exlilt);
@@ -533,7 +576,7 @@ namespace ControlLicencias.Controllers
 
                     //Date psico
                     string exppsilt = "01-01-1999";
-                    string exppsicolt = json.ExpPsico + "";
+                    string exppsicolt = jsonlt.ExpPsico + "";
                     if (exppsicolt != "" && string.IsNullOrWhiteSpace(exppsicolt) == false && psicolt.Contains("rue")) {
                         string exsilt = exppsicolt;
                         exppsilt = buildDate(exsilt);
@@ -549,17 +592,17 @@ namespace ControlLicencias.Controllers
 
                     //Date acc
                     string accdatelt = "01-01-1999";
-                    string accdatedlt = json.AccDate + "";
+                    string accdatedlt = jsonlt.AccDate + "";
                     if (accdatedlt != "" && string.IsNullOrWhiteSpace(accdatedlt) == false) {
-                        string adatlt = json.AccDate + "";
+                        string adatlt = jsonlt.AccDate + "";
                     }
 
                     string formatlt = "dd-MM-yyyy";
-                    var ldtlt = DateTime.ParseExact(expliclt, format, new CultureInfo("es-CL"));
-                    var pdtlt = DateTime.ParseExact(exppsilt, format, new CultureInfo("es-CL"));
+                    var ldtlt = DateTime.ParseExact(expliclt, formatlt, new CultureInfo("es-CL"));
+                    var pdtlt = DateTime.ParseExact(exppsilt, formatlt, new CultureInfo("es-CL"));
                     //var adt = DateTime.ParseExact(expalt, format, new CultureInfo("es-CL"));
                     //var gdt = DateTime.ParseExact(expg21, format, new CultureInfo("es-CL"));
-                    var acdlt = DateTime.ParseExact(accdatelt, format, new CultureInfo("es-CL"));
+                    var acdlt = DateTime.ParseExact(accdatelt, formatlt, new CultureInfo("es-CL"));
 
                     //Validators
                     bool liclt = false;

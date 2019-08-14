@@ -1,0 +1,289 @@
+﻿
+@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="container">
+        <ul class="progressbar">
+            <li class="@ViewData["t1"]">Ingresada</li>
+            <li class="@ViewData["t2"]">En Proceso</li>
+            <li class="@ViewData["t3"]">En Impresión</li>
+            <li class="@ViewData["t4"]">Lista para Retiro</li>
+            <li class="@ViewData["t5"]">Recibida</li>
+        </ul>
+
+        <div class="row">
+            <div class="col s12 offset-s2 m6 offset-m3 left-align">
+                <div class="card left-align">
+                    <div class="card-image">
+                        <img class="activator" src="@ViewData["Data"]">
+                    </div>
+                </div>
+
+                <div class="card left-align">
+                    <div class="card-image">
+                        <b>Nombre Solicitante:</b> @ViewData["Solname"]
+                        <br /><b>Estado:</b> @ViewData["Status"]
+                        <br /><b>Ticket:</b> @ViewData["Ticket"]
+                        <br /><b>Info:</b> @ViewData["Info"]
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="center-align">
+
+
+            <div id="loader" class="preloader-wrapper big active" hidden>
+                <div class="spinner-layer spinner-blue-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                        <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul id="wclist" class="collection" hidden>
+            <li class="collection-item avatar" name="twochore" id="twochore">
+                <p>
+                    <span>Los Bronces</span>
+                    <span class="inforight">Las Tórtolas</span>
+                </p>
+            </li>
+            <li class="collection-item avatar">
+                <i name="forma1" id="forma1" class="material-icons circle red">folder</i>
+                <span class="title">Formulario A1</span>
+                <p>
+                    <span id="infoa1" name="infoa1"></span>
+                    <span id="infoa1lt" name="infoa1lt" class="inforight"></span>
+                </p>
+                <a href="#!" class="secondary-content">
+                    <i name="forma1lt" id="forma1lt" class="material-icons circle red dotright">folder</i>
+                </a>
+            </li>
+            <li class="collection-item avatar">
+                <i name="altamo" id="altamo" class="material-icons circle green">filter_hdr</i>
+                <span class="title">Alta Montaña</span>
+                <p>
+                    <span id="highmountm" name="highmountm"></span>
+                    <span id="highmountmlt" name="highmountmlt" class="inforight"></span>
+                </p>
+                <a href="#!" class="secondary-content">
+                    <i name="altamolt" id="altamolt" class="material-icons circle green dotright">filter_hdr</i>
+                </a>
+            </li>
+            <li class="collection-item avatar">
+                <i name="licen" id="licen" class="material-icons circle red">chrome_reader_mode</i>
+                <span class="title">Licencia de Conducir</span>
+                <p>
+                    <span id="licensem" name="licensem"></span>
+                    <span id="licensemlt" name="licensemlt" class="inforight"></span>
+                </p>
+                <a href="#!" class="secondary-content">
+                    <i name="licenlt" id="licenlt" class="material-icons circle red dotright">chrome_reader_mode</i>
+                </a>
+            </li>
+            <li class="collection-item avatar" name="routesx" id="routesx">
+                <i name="rutasa" id="rutasa" class="material-icons circle green">commute</i>
+                <span class="title">Curso G21 G245</span>
+                <p>
+                    <span id="routesm" name="routesm"></span>
+                    <span id="routesmlt" name="routesmlt" class="inforight">No Aplica</span>
+                </p>
+                <a href="#!" class="secondary-content">
+                    <i name="routelt" id="routelt" class="material-icons circle grey lighten-1 dotright">commute</i>
+                </a>
+            </li>
+            <li class="collection-item avatar">
+                <i name="psicos" id="psicos" class="material-icons circle red">swap_calls</i>
+                <span class="title">Psicosensotécnico</span>
+                <p>
+                    <span id="psicom" name="psicom"></span>
+                    <span id="psicomlt" name="psicomlt" class="inforight"></span>
+                </p>
+                <a href="#!" class="secondary-content">
+                    <i name="psicoslt" id="psicoslt" class="material-icons circle red dotright">swap_calls</i>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+@section Scripts{ 
+<script>
+    testing();
+        function testing() {
+
+        var rut = "@ViewData["rut"]";
+            var chr = "@ViewData["chr"]";
+            var response = JSON.parse('@Html.Raw(Json.Serialize(ViewData["reswc"]))');
+                $("#loader").hide();
+                $("#wclist").show();
+            console.log(response);
+            if (chr == "lb") {
+                $('.waitmore').hide();
+                $('#twochore').hide();
+                $('.inforight').hide();
+                $('.dotright').hide();
+                if (response.Aon == "True") {
+                $('#forma1').removeClass('red').addClass('green');
+                    $('#infoa1').text("Activo");
+                } else {
+                $('#forma1').removeClass('green').addClass('red');
+                    $('#infoa1').text("Inexistente");
+                }
+                if (response.Alt == "True") {
+                    $('#altamo').removeClass('red').addClass('green');
+                    $('#highmountm').text("Activo");
+                } else {
+                    $('#altamo').removeClass('green').addClass('red');
+                    $('#highmountm').text("Inexistente");
+                }
+                if (response.Lic == "True") {
+                    $('#licen').removeClass('red').addClass('green');
+                    $('#licensem').text("Activo");
+                } else {
+                    $('#licen').removeClass('green').addClass('red');
+                    $('#licensem').text("Vencida o Invalidada");
+                }
+                $('#rutasa').show();
+                $('#routesm').show();
+                $('#routesx').show();
+                if (response.G21 == "True") {
+                    $('#rutasa').removeClass('red').addClass('green');
+                    $('#routesm').text("Activo");
+                } else {
+                    $('#rutasa').removeClass('green').addClass('red');
+                    $('#routesm').text("Inexistente");
+                }
+                if (response.Psi == "True") {
+                    $('#psicos').removeClass('red').addClass('green');
+                    $('#psicom').text("Activo");
+                } else {
+                    $('#psicos').removeClass('green').addClass('red');
+                    $('#psicom').text("Vencido o Invalidado");
+                }
+            }
+            if (chr == "lt") {
+                $('#twochore').hide();
+                $('.inforight').hide();
+                $('.dotright').hide();
+                if (response.Aon == "True") {
+                    $('#forma1').removeClass('red').addClass('green');
+                    $('#infoa1').text("Activo");
+                } else {
+                    $('#forma1').removeClass('green').addClass('red');
+                    $('#infoa1').text("Inexistente");
+                }
+                if (response.Alt == "True") {
+                    $('#altamo').removeClass('red').addClass('green');
+                    $('#highmountm').text("Activo");
+                } else {
+                    $('#altamo').removeClass('green').addClass('red');
+                    $('#highmountm').text("Inexistente");
+                }
+                if (response.Lic == "True") {
+                    $('#licen').removeClass('red').addClass('green');
+                    $('#licensem').text("Activo");
+                } else {
+                    $('#licen').removeClass('green').addClass('red');
+                    $('#licensem').text("Vencida o Invalidada");
+                }
+                    $('#rutasa').hide();
+                    $('#routesm').hide();
+                    $('#routesx').hide();
+
+                if (response.Psi == "True") {
+                    $('#psicos').removeClass('red').addClass('green');
+                    $('#psicom').text("Activo");
+                } else {
+                    $('#psicos').removeClass('green').addClass('red');
+                    $('#psicom').text("Vencido o Invalidado");
+                }
+            }
+            if (chr == "bt") {
+                $('#twochore').show();
+                $('.inforight').show();
+                $('.dotright').show();
+                if (response.Aon == "True") {
+                    $('#forma1').removeClass('red').addClass('green');
+                    $('#infoa1').text("Activo");
+                } else {
+                    $('#forma1').removeClass('green').addClass('red');
+                    $('#infoa1').text("Inexistente");
+                }
+                if (response.Alt == "True") {
+                    $('#altamo').removeClass('red').addClass('green');
+                    $('#highmountm').text("Activo");
+                } else {
+                    $('#altamo').removeClass('green').addClass('red');
+                    $('#highmountm').text("Inexistente");
+                }
+                if (response.Lic == "True") {
+                    $('#licen').removeClass('red').addClass('green');
+                    $('#licensem').text("Activo");
+                } else {
+                    $('#licen').removeClass('green').addClass('red');
+                    $('#licensem').text("Vencida o Invalidada");
+                }
+                    $('#rutasa').hide();
+                    $('#routesm').hide();
+                    $('#routesx').hide();
+
+                if (response.Psi == "True") {
+                    $('#psicos').removeClass('red').addClass('green');
+                    $('#psicom').text("Activo");
+                } else {
+                    $('#psicos').removeClass('green').addClass('red');
+                    $('#psicom').text("Vencido o Invalidado");
+                }
+                                $('#twochore').show();
+                if (response.Aonlt == "True") {
+                    $('#forma1lt').removeClass('red').addClass('green');
+                    $('#infoa1lt').text("Activo");
+                } else {
+                    $('#forma1lt').removeClass('green').addClass('red');
+                    $('#infoa1lt').text("Inexistente");
+                }
+                if (response.Altlt == "True") {
+                    $('#altamolt').removeClass('red').addClass('green');
+                    $('#highmountmlt').text("Activo");
+                } else {
+                    $('#altamolt').removeClass('green').addClass('red');
+                    $('#highmountmlt').text("Inexistente");
+                }
+                if (response.Liclt == "True") {
+                    $('#licenlt').removeClass('red').addClass('green');
+                    $('#licensemlt').text("Activo");
+                } else {
+                    $('#licenlt').removeClass('green').addClass('red');
+                    $('#licensemlt').text("Vencida o Invalidada");
+                }
+                $('#rutasa').show();
+                $('#routesm').show();
+                $('#routesx').show();
+
+                if (response.Psilt == "True") {
+                    $('#psicoslt').removeClass('red').addClass('green');
+                    $('#psicomlt').text("Activo");
+                } else {
+                    $('#psicoslt').removeClass('green').addClass('red');
+                    $('#psicomlt').text("Vencido o Invalidado");
+                }
+                
+            }
+            
+            
+       
+
+
+        
+    }
+</script>
+
+}

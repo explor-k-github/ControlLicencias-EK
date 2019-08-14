@@ -263,6 +263,7 @@
         <div class="progress">
             <div class="indeterminate"></div>
         </div>
+        <span class="waitmore">Es posible que tome más tiempo de lo esperado debido a que se consultan ambas faenas.</span>
     </div>
 </div>
 
@@ -334,7 +335,7 @@
                 </a>
             </li>
         </ul>
-    * Ignorar en
+    * Ignorar en caso de estar todo correcto.
     </div>
 
     <div class="modal-footer">
@@ -487,8 +488,11 @@
         $.ajax(settings).done(function (response) {
             instancehh.close();
             console.log(response);
-            if (chr == "lb") { 
+            if (chr == "lb") {
+                $('.waitmore').hide();
                 $('#twochore').hide();
+                $('.inforight').hide();
+                $('.dotright').hide();
                 if (response.Aon == "True") {
                 $('#forma1').removeClass('red').addClass('green');
                     $('#infoa1').text("Activo");
@@ -537,7 +541,10 @@
                 }
             }
             if (chr == "lt") {
+                $('.waitmore').hide();
                 $('#twochore').hide();
+                $('.inforight').hide();
+                $('.dotright').hide();
                 if (response.Aon == "True") {
                     $('#forma1').removeClass('red').addClass('green');
                     $('#infoa1').text("Activo");
@@ -580,7 +587,10 @@
                 }
             }
             if (chr == "bt") {
+                $('.waitmore').show();
                 $('#twochore').show();
+                $('.inforight').show();
+                $('.dotright').show();
                 if (response.Aon == "True") {
                     $('#forma1').removeClass('red').addClass('green');
                     $('#infoa1').text("Activo");
