@@ -21,13 +21,15 @@
                 </a>
                 <div class="col s1">&nbsp;</div>
                 <div class="col s1">&nbsp;</div>
+                @if (ViewData["Admin"].Equals("true")) {
+                    <a href="/License/NewUser">
+                        <div style="padding: 30px;" class="grey lighten-3 col s5 waves-effect disabled">
+                            <i class="teal-text text-lighten-1 large material-icons disabled">vpn_key</i>
+                            <span class="teal-text text-lighten-1 disabled"><h5>Crear Usuario</h5></span>
+                        </div>
+                    </a>
+                }
 
-                <a href="#!">
-                    <div style="padding: 30px;" class="grey lighten-3 col s5 waves-effect">
-                        <i class="teal-text text-lighten-1 large material-icons">people</i>
-                        <span class="teal-text text-lighten-1"><h5>Por Lotes</h5></span>
-                    </div>
-                </a>
             </div>
         </div>
     </div>
@@ -43,7 +45,7 @@
                 </div>
             </div>
             <div class="row">
-                <a href="/License/Requests">
+                <a href="/Status">
                     <div style="padding: 30px;" class="grey lighten-3 col s5 waves-effect">
                         <i class="teal-text text-lighten-1 large material-icons">view_list</i>
                         <span class="teal-text text-lighten-1"><h5>Estado de Solicitudes</h5></span>
@@ -51,13 +53,13 @@
                 </a>
                 <div class="col s1">&nbsp;</div>
                 <div class="col s1">&nbsp;</div>
-
+                <!--
                 <a href="#!">
                     <div style="padding: 30px;" class="grey lighten-3 col s5 waves-effect">
                         <i class="teal-text text-lighten-1 large material-icons">view_list</i>
                         <span class="truncate teal-text text-lighten-1"><h5>Licencias Emitidas</h5></span>
                     </div>
-                </a>
+                </a>-->
             </div>
         </div>
     </div>

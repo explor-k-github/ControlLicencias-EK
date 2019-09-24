@@ -18,7 +18,7 @@ namespace ControlLicencias.Models {
 
         public Driver GetDriver(int rut) {
             Database db = new Database();
-            string query = "SELECT * from conductores WHERE rut = '" + rut + "';";
+            string query = "SELECT * from Conductor WHERE `RUN_CORREGIDO` = '" + rut + "';";
             var xd = db.Select(query);
             Driver caux = new Driver();
             while (xd.Read()) {
@@ -31,7 +31,7 @@ namespace ControlLicencias.Models {
 
         public bool GetExistentDriver(string rut) {
             Database db = new Database();
-            string query = "SELECT * FROM `conductores` WHERE rut='" + rut + "';";
+            string query = "SELECT * FROM `Conductor` WHERE `RUN_CORREGIDO`='" + rut + "';";
             var xd = db.Select(query);
             Driver caux = new Driver();
             while (xd.Read()) {

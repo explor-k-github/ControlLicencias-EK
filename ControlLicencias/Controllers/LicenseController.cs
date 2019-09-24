@@ -4,6 +4,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using ControlLicencias.Models;
 using Microsoft.AspNetCore.Http;
@@ -19,8 +21,9 @@ namespace ControlLicencias.Controllers
     public class LicenseController : Controller {
         public IActionResult Index() {
             string isadmin = HttpContext.Session.GetString("Admin");
+            string islogged = HttpContext.Session.GetString("Logged");
             ViewData["User"] = HttpContext.Session.GetString("User");
-            if (isadmin != "true") {
+            if (islogged != "true") {
                 return RedirectToAction("Index", "Home");
             } else {
                 Company cc = new Company();
@@ -33,6 +36,20 @@ namespace ControlLicencias.Controllers
             }
         }
 
+        public IActionResult NewUser() {
+            string isadmin = HttpContext.Session.GetString("Admin");
+            string islogged = HttpContext.Session.GetString("Logged");
+            if(isadmin == "true") {
+                return View();
+            } else {
+                return RedirectToAction("About", "Home");
+            }
+            
+        }
+
+
+
+
         public static String GetTimestamp() {
             long epochTicks = new DateTime(1970, 1, 1).Ticks;
             long unixTime = ((DateTime.UtcNow.Ticks - epochTicks) / TimeSpan.TicksPerSecond);
@@ -40,9 +57,10 @@ namespace ControlLicencias.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadData(string rut, string name, string lastname, string birthdate, string company, string chore, string access, string[] vehicles, string restrictions, string specrest, string[] license, string[] anglolicense, string licexpdate, IFormFile photo, string drivermail, string driverphone, string companymail, string companyphone, string wcdate, string solname) {
+        public async Task<IActionResult> UploadData(string rut, string name, string lastname, string birthdate, string company, string chore, string[] access, string[] vehicles, string restrictions, string specrest, string[] license, string[] anglolicense, string licexpdate, IFormFile photo, string drivermail, string driverphone, string companymail, string companyphone, string wcdate, string solname) {
             string vehicleaux = string.Join(",", vehicles);
             string licenseaux = string.Join(",", license);
+            string accesaux = string.Join(",", access);
             string anglolicenseaux = string.Join(",", anglolicense);
             string uniquerut = rut.Replace(".","").Replace("-","").Replace("K","").Replace("k","");
             int rutid = int.Parse(uniquerut);
@@ -60,13 +78,15 @@ namespace ControlLicencias.Controllers
             var exists = raux.GetExistentRequest(rut);
             Driver daux = new Driver();
             var dexists = daux.GetExistentDriver(rut);
-            if (exists == true) {
-                Console.WriteLine("Estado Rut: " + rut + " Ya Solicitado");
-                return Content("EXISTS");
-            } else if (dexists == true) {
+
+
+            if (dexists == true) {
                 Console.WriteLine("Estado Rut: " + rut + " En Masivo");
                 return Content("MASIVO");
-            } else if (exists == false && dexists == false) {
+            } else if (exists == true) {
+                Console.WriteLine("Estado Rut: " + rut + " Ya Solicitado");
+                return Content("EXISTS");
+            }  else if (exists == false && dexists == false) {
                 CultureInfo culture = new CultureInfo("es-ES");
 
                 Company comp = new Company();
@@ -101,7 +121,7 @@ namespace ControlLicencias.Controllers
 
                 if (specrest != "") {
                     Console.WriteLine("Solicitud Entrante - " + rut);
-                    Request req = new Request("", rut, name, lastname, birthday, aux, faenas, access, vehicleaux, restrictions, specrest, licenseaux, anglolicenseaux, licenseexp, pfname, drivermail, driverphone, companymail, companyphone, webcontrol, solname, ""+uuid);
+                    Request req = new Request("", rut, name, lastname, birthday, aux, faenas, accesaux, vehicleaux, restrictions, specrest, licenseaux, anglolicenseaux, licenseexp, pfname, drivermail, driverphone, companymail, companyphone, webcontrol, solname, ""+uuid);
                     req.AddRequestToDB();
                     Console.WriteLine("Solicitud Almacenada - " + rut);
                     Mailer ml = new Mailer();
@@ -109,7 +129,7 @@ namespace ControlLicencias.Controllers
                     ml.SendMailInternal("Solicitud Ingresada", uuid + "", solname);
                 } else {
                     Console.WriteLine("Solicitud Entrante - " + rut);
-                    Request req = new Request("", rut, name, lastname, birthday, aux, faenas, access, vehicleaux, restrictions, licenseaux, anglolicenseaux, licenseexp, pfname, drivermail, driverphone, companymail, companyphone, webcontrol, solname);
+                    Request req = new Request("", rut, name, lastname, birthday, aux, faenas, accesaux, vehicleaux, restrictions, licenseaux, anglolicenseaux, licenseexp, pfname, drivermail, driverphone, companymail, companyphone, webcontrol, solname);
                     req.AddRequestToDB();
                     Console.WriteLine("Solicitud Almacenada - " + rut);
                 }
@@ -172,7 +192,7 @@ namespace ControlLicencias.Controllers
                         resbadlb.Add("Acc", "False");
                         resbadlb.Add("Lic", "False");
                         resbadlb.Add("Psi", "False");
-                        resbadlb.Add("Alt", "False");
+                        // resbadlb.Add("Alt", "False");
                         // results.Add("G21", g21.ToString());
                         resbadlb.Add("Aon", "False");
                         return resbadlb;
@@ -181,9 +201,9 @@ namespace ControlLicencias.Controllers
                     dynamic json = job;
                     string psico = json.Psico + "";
                     string license = json.License + "";
-                    string altamon = json.HighMountain + "";
+                    //string altamon = json.HighMountain + "";
                     string aone = json.A1 + "";
-                    string g2145 = json.G21G245 + "";
+                    //string g2145 = json.G21G245 + "";
                     string lifep = json.LifePaper + "";
                     Console.WriteLine(">>>" + aone);
 
@@ -208,12 +228,12 @@ namespace ControlLicencias.Controllers
                     }
 
                     //Date g21
-                    string expg21 = "01-01-1999";
+                    /*string expg21 = "01-01-1999";
                     string expg21g245 = json.ExpG21G245 + "";
                     if (expg21g245 != "" && string.IsNullOrWhiteSpace(expg21g245) == false && g2145.Contains("rue")) {
                         string eg21 = json.ExpG21G245 + "";
                         expg21 = buildDate(eg21);
-                    }
+                    }*/
 
                     //Date acc
                     string accdate = "01-01-1999";
@@ -226,18 +246,18 @@ namespace ControlLicencias.Controllers
                     var ldt = DateTime.ParseExact(explic, format, new CultureInfo("es-CL"));
                     var pdt = DateTime.ParseExact(exppsi, format, new CultureInfo("es-CL"));
                     //var adt = DateTime.ParseExact(expalt, format, new CultureInfo("es-CL"));
-                    var gdt = DateTime.ParseExact(expg21, format, new CultureInfo("es-CL"));
+                    //var gdt = DateTime.ParseExact(expg21, format, new CultureInfo("es-CL"));
                     var acd = DateTime.ParseExact(accdate, format, new CultureInfo("es-CL"));
 
                     //Validators
                     bool lic = false;
                     bool psi = false;
-                    bool alt = false;
-                    bool g21 = false;
+                    // bool alt = false;
+                    // bool g21 = false;
                     bool acc = false;
                     bool aun = false;
 
-                    if (DateTime.Now.AddMonths(-6) > acd) {
+                    /*if (DateTime.Now.AddMonths(-6) > acd) {
                         acc = true;
                         g21 = true;
                     } else {
@@ -247,7 +267,7 @@ namespace ControlLicencias.Controllers
                         } else {
                             g21 = false;
                         }
-                    }
+                    }*/
 
                     if (DateTime.Today < ldt) {
                         lic = true;
@@ -267,24 +287,24 @@ namespace ControlLicencias.Controllers
                         aun = false;
                     }
 
-                    if (altamon.Contains("True")||altamon.Contains("true")) {
+                    /*if (altamon.Contains("True")||altamon.Contains("true")) {
                         alt = true;
                     } else {
                         alt = false;
-                    }
+                    }*/
 
                     Console.WriteLine("Acc: " + acc.ToString());
                     Console.WriteLine("Lic: " + lic.ToString());
                     Console.WriteLine("Psi: " + psi.ToString());
-                    Console.WriteLine("Alt: " + alt.ToString());
-                    Console.WriteLine("G21: " + g21.ToString());
+                    // Console.WriteLine("Alt: " + alt.ToString());
+                    // Console.WriteLine("G21: " + g21.ToString());
                     Console.WriteLine("A1: " + aun.ToString());
                     JObject results = new JObject();
                     results.Add("Acc", acc.ToString());
                     results.Add("Lic", lic.ToString());
                     results.Add("Psi", psi.ToString());
-                    results.Add("Alt", alt.ToString());
-                    results.Add("G21", g21.ToString());
+                    // results.Add("Alt", alt.ToString());
+                    // results.Add("G21", g21.ToString());
                     results.Add("Aon", aun.ToString());
                     return results;
                 }
@@ -357,7 +377,7 @@ namespace ControlLicencias.Controllers
                     //Validators
                     bool lic = false;
                     bool psi = false;
-                    bool alt = false;
+                    // bool alt = false;
                     // bool g21 = false;
                     bool acc = false;
                     bool aun = false;
@@ -395,11 +415,11 @@ namespace ControlLicencias.Controllers
                         aun = false;
                     }
 
-                    if (altamon.Contains("True")) {
+                    /*if (altamon.Contains("True")) {
                         alt = true;
                     } else {
                         alt = false;
-                    }
+                    }*/
 
                     Console.WriteLine("Acc: " + acc.ToString());
                     Console.WriteLine("Lic: " + lic.ToString());
@@ -411,7 +431,7 @@ namespace ControlLicencias.Controllers
                     results.Add("Acc", acc.ToString());
                     results.Add("Lic", lic.ToString());
                     results.Add("Psi", psi.ToString());
-                    results.Add("Alt", alt.ToString());
+                    // results.Add("Alt", alt.ToString());
                     // results.Add("G21", g21.ToString());
                     results.Add("Aon", aun.ToString());
                     return results;
@@ -425,7 +445,7 @@ namespace ControlLicencias.Controllers
                         results.Add("Acc", "False");
                         results.Add("Lic", "False");
                         results.Add("Psi", "False");
-                        results.Add("Alt", "False");
+                        // results.Add("Alt", "False");
                         // results.Add("G21", g21.ToString());
                         results.Add("Aon", "False");
                         goto lastortolas;
@@ -434,9 +454,9 @@ namespace ControlLicencias.Controllers
                     dynamic json = job;
                     string psico = json.Psico + "";
                     string license = json.License + "";
-                    string altamon = json.HighMountain + "";
+                    // string altamon = json.HighMountain + "";
                     string aone = json.A1 + "";
-                    string g2145 = json.G21G245 + "";
+                    // string g2145 = json.G21G245 + "";
                     string lifep = json.LifePaper + "";
                     Console.WriteLine(">>>" + aone);
 
@@ -461,12 +481,12 @@ namespace ControlLicencias.Controllers
                     }
 
                     //Date g21
-                    string expg21 = "01-01-1999";
+                    /*string expg21 = "01-01-1999";
                     string expg21g245 = json.ExpG21G245 + "";
                     if (expg21g245 != "" && string.IsNullOrWhiteSpace(expg21g245) == false && g2145.Contains("rue")) {
                         string eg21 = json.ExpG21G245 + "";
                         expg21 = buildDate(eg21);
-                    }
+                    }*/
 
                     //Date acc
                     string accdate = "01-01-1999";
@@ -479,18 +499,18 @@ namespace ControlLicencias.Controllers
                     var ldt = DateTime.ParseExact(explic, format, new CultureInfo("es-CL"));
                     var pdt = DateTime.ParseExact(exppsi, format, new CultureInfo("es-CL"));
                     //var adt = DateTime.ParseExact(expalt, format, new CultureInfo("es-CL"));
-                    var gdt = DateTime.ParseExact(expg21, format, new CultureInfo("es-CL"));
+                    //var gdt = DateTime.ParseExact(expg21, format, new CultureInfo("es-CL"));
                     var acd = DateTime.ParseExact(accdate, format, new CultureInfo("es-CL"));
 
                     //Validators
                     bool lic = false;
                     bool psi = false;
-                    bool alt = false;
-                    bool g21 = false;
+                    //bool alt = false;
+                    //bool g21 = false;
                     bool acc = false;
                     bool aun = false;
 
-                    if (DateTime.Now.AddMonths(-6) > acd) {
+                    /*if (DateTime.Now.AddMonths(-6) > acd) {
                         acc = true;
                         g21 = true;
                     } else {
@@ -500,7 +520,7 @@ namespace ControlLicencias.Controllers
                         } else {
                             g21 = false;
                         }
-                    }
+                    }*/
 
                     if (DateTime.Today < ldt) {
                         lic = true;
@@ -520,24 +540,24 @@ namespace ControlLicencias.Controllers
                         aun = false;
                     }
 
-                    if (altamon.Contains("True") || altamon.Contains("true")) {
+                    /*if (altamon.Contains("True") || altamon.Contains("true")) {
                         alt = true;
                     } else {
                         alt = false;
-                    }
+                    }*/
 
                     Console.WriteLine("Acc: " + acc.ToString());
                     Console.WriteLine("Lic: " + lic.ToString());
                     Console.WriteLine("Psi: " + psi.ToString());
-                    Console.WriteLine("Alt: " + alt.ToString());
-                    Console.WriteLine("G21: " + g21.ToString());
+                    //Console.WriteLine("Alt: " + alt.ToString());
+                    //Console.WriteLine("G21: " + g21.ToString());
                     Console.WriteLine("A1: " + aun.ToString());
                     
                     results.Add("Acc", acc.ToString());
                     results.Add("Lic", lic.ToString());
                     results.Add("Psi", psi.ToString());
-                    results.Add("Alt", alt.ToString());
-                    results.Add("G21", g21.ToString());
+                    // results.Add("Alt", alt.ToString());
+                    // results.Add("G21", g21.ToString());
                     results.Add("Aon", aun.ToString());
                     //CHECK LT
                     //LT DOESNT HAVE G21
@@ -607,7 +627,7 @@ namespace ControlLicencias.Controllers
                     //Validators
                     bool liclt = false;
                     bool psilt = false;
-                    bool altlt = false;
+                    // bool altlt = false;
                     // bool g21 = false;
                     bool acclt = false;
                     bool aunlt = false;
@@ -642,11 +662,11 @@ namespace ControlLicencias.Controllers
                         aunlt = false;
                     }
 
-                    if (altamonlt.Contains("True")) {
+                    /*if (altamonlt.Contains("True")) {
                         altlt = true;
                     } else {
                         altlt = false;
-                    }
+                    }*/
 
                     Console.WriteLine("Acc: " + acclt.ToString());
                     Console.WriteLine("Lic: " + liclt.ToString());
@@ -657,7 +677,7 @@ namespace ControlLicencias.Controllers
                     results.Add("Acclt", acclt.ToString());
                     results.Add("Liclt", liclt.ToString());
                     results.Add("Psilt", psilt.ToString());
-                    results.Add("Altlt", altlt.ToString());
+                    // results.Add("Altlt", altlt.ToString());
                     // results.Add("G21", g21.ToString());
                     results.Add("Aonlt", aunlt.ToString());
 
@@ -671,9 +691,13 @@ namespace ControlLicencias.Controllers
 
         public IActionResult Login(string Usr, string Pass) {
             DateTime dt = DateTime.Now;
-            User user = new User("", Usr, Pass, dt);
+            User user = new User("", Usr, Pass, "", dt);
+            
             if (user.Authenticate(Usr, Pass)) {
-                HttpContext.Session.SetString("Admin", "true");
+                if(user.type == "1") {
+                    HttpContext.Session.SetString("Admin", "true");
+                }
+                HttpContext.Session.SetString("Logged","true");
                 HttpContext.Session.SetString("User", Usr);
                 ViewData["User"] = Usr;
                 return RedirectToAction("About", "Home");
@@ -686,8 +710,43 @@ namespace ControlLicencias.Controllers
 
         }
 
+
+        public JObject Create(string Usr) {
+            string isadmin = HttpContext.Session.GetString("Admin");
+            string islogged = HttpContext.Session.GetString("Logged");
+            if(isadmin == "true") {
+                DateTime dt = DateTime.Now;
+                if (Usr.Contains("@")) {
+                    string password = Usr.Split('@')[0];
+                    string hash = "";
+                    using (var sha1 = new SHA1Managed()) {
+                        hash = BitConverter.ToString(sha1.ComputeHash(Encoding.UTF8.GetBytes(password))).Replace("-", "");
+                    }
+                    User user = new User("", Usr, hash, "0", dt);
+                    if (user.CheckIfExists()) {
+                        return JObject.Parse("{ \"error\":\"El usuario ya existe.\" }");
+                    } else {
+                        bool stat = user.CreateUser(user);
+                        if (stat == true) {
+                            return JObject.Parse("{ \"usr\":\"" + Usr + "\", \"pass\":\"" + password + "\" }");
+                        } else {
+                            return JObject.Parse("{ \"error\":\"No se ha podido crear un usuario.\" }");
+                        }
+                    }
+                } else {
+                    return JObject.Parse("{ \"error\":\"El usuario debe ser un correo electrónico.\" }");
+                }
+            } else {
+                return JObject.Parse("{ \"error\":\"Debes estar logueado como administrador para generar usuarios.\" }");
+            }
+            
+            
+
+        }
+
         public IActionResult Logout() {
-                HttpContext.Session.SetString("Admin", "false");
+            HttpContext.Session.SetString("Logged", "false");
+            HttpContext.Session.SetString("Admin", "false");
                 HttpContext.Session.SetString("User", "--");
                 ViewData["User"] = "";
                 return RedirectToAction("Index", "Home");
@@ -756,7 +815,7 @@ namespace ControlLicencias.Controllers
                     worksheet.Cells[i + 2, 2].Value = rtrt + "-" + rtcp;
                         worksheet.Cells[i + 2, 3].Value = reqs[i].name.ToUpper();
                         worksheet.Cells[i + 2, 4].Value = reqs[i].lastname.ToUpper();
-                        worksheet.Cells[i + 2, 5].Value = reqs[i].birthdate.ToString("dd/MM/yyyy");
+                        worksheet.Cells[i + 2, 5].Value = reqs[i].birthdate.ToString("dd-MM-yyyy");
                         worksheet.Cells[i + 2, 6].Value = reqs[i].company.company;
                         worksheet.Cells[i + 2, 7].Value = reqs[i].chore.ToUpper();
                         worksheet.Cells[i + 2, 8].Value = reqs[i].access.ToUpper();
@@ -764,12 +823,12 @@ namespace ControlLicencias.Controllers
                         worksheet.Cells[i + 2, 10].Value = reqs[i].restrictions.ToUpper();
                         worksheet.Cells[i + 2, 11].Value = reqs[i].license.ToUpper().Replace(",", "-");
                         worksheet.Cells[i + 2, 12].Value = reqs[i].anglolicense.ToUpper().Replace(",", "-");
-                        worksheet.Cells[i + 2, 13].Value = reqs[i].licexpdate.ToString("dd/MM/yyyy");
+                        worksheet.Cells[i + 2, 13].Value = reqs[i].licexpdate.ToString("dd-MM-yyyy");
                         worksheet.Cells[i + 2, 14].Value = rtrt + "-" + rtcp;
                     worksheet.Cells[i + 2, 15].Value = reqs[i].drivermail;
                         worksheet.Cells[i + 2, 16].Value = reqs[i].driverphone;
                         worksheet.Cells[i + 2, 17].Value = reqs[i].companyphone;
-                        worksheet.Cells[i + 2, 18].Value = reqs[i].wcdate.ToString("dd/MM/yyyy");
+                        worksheet.Cells[i + 2, 18].Value = reqs[i].wcdate.ToString("dd-MM-yyyy");
                         worksheet.Cells[i + 2, 19].Value = reqs[i].rut.Replace(".","").Replace("-","");
                 }
                 // worksheet.Cells[2, 1].Value = "Probando";

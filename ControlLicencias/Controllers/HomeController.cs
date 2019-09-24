@@ -19,11 +19,13 @@ namespace ControlLicencias.Controllers {
 
         public IActionResult About() {
             string isadmin = HttpContext.Session.GetString("Admin");
+            string islogged = HttpContext.Session.GetString("Logged");
             ViewData["User"] = HttpContext.Session.GetString("User");
-            if (isadmin != "true") {
+            ViewData["Admin"] = isadmin;
+            if (islogged != "true") {
                 return RedirectToAction("Index", "Home");
             } else {
-                ViewData["Message"] = "Your application description page.";
+                ViewData["Message"] = "No estás Logueado.";
 
                 return View();
             }

@@ -1,0 +1,125 @@
+﻿
+@{
+    ViewData["Title"] = "NewUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col s8 offset-s2 m6 offset-m3">
+            <div class="card center-align">
+                <div class="card-image">
+                    <img class="activator" src="~/images/licenciasnew.jpg">
+                </div>
+                <div class="card-tabs">
+                    <ul class="tabs tabs-fixed-width">
+                        <li class="tab"><a href="#test4">Nuevo Usuario</a></li>
+                    </ul>
+                </div>
+                <div class="card-content grey lighten-4">
+                    <div id="test4">
+                        <div class="row">
+                            <form class="col s12" asp-controller="License" asp-action="Login" method="POST">
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">domain</i>
+                                    <input placeholder="ejemplo@dominio.com" id="Usr" name="Usr" type="text" class="validate">
+                                    <label for="email">Email Empresa</label>
+                                </div>
+                                <div>
+                                    <button type="button" name="action" id="action" class="waves-effect waves-light btn red"><i class="material-icons right">arrow_forward</i>Generar Usuario</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Falla -->
+<div id="modalFail" class="modal">
+    <div class="modal-content">
+        <h4>Error.</h4>
+        <h6>Usuario y/o Contraseña Incorrectos.</h6>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+    </div>
+</div>
+
+<!-- Modal Ok -->
+<div id="modalOk" class="modal">
+    <div class="modal-content">
+        <h4>Usuario Generado Correctamente.</h4>
+        <h6><b>Usuario:</b> <span id="usrspan"></span></h6>
+        <h6><b>Contraseña:</b> <span id="passpan"></span></h6>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+    </div>
+</div>
+
+<!-- Modal Error -->
+<div id="modalError" class="modal">
+    <div class="modal-content">
+        <h4>Ha ocurrido un error.</h4>
+        <h6><span id="errortxt"></span></h6>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $('.tabs').tabs();
+            $('.modal').modal();
+        });
+
+        $("#action").on("click", function () {
+            sendData();
+        });
+
+        function sendData() {
+            var felement = document.querySelector("form");
+            var form = new FormData(felement);
+
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": "/License/Create/",
+                "method": "POST",
+                "processData": false,
+                "contentType": false,
+                "data": form
+            }
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+                if (response.error) {
+                    $("#errortxt").text(response.error);
+                    var instance = M.Modal.getInstance($("#modalError"));
+
+                    instance.open();
+                } else {
+                    $("#usrspan").text(response.usr);
+                $("#passpan").text(response.pass);
+                var instance = M.Modal.getInstance($('#modalOk'));
+                instance.open()
+                }
+                
+            }).fail(function (response) {
+                $("#errortxt").text(response.error);
+                var instance = M.Modal.getInstance($("#modalError"));
+                
+                instance.open();
+            });
+        }
+
+    </script>
+
+}

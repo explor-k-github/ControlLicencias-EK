@@ -57,12 +57,12 @@
         <div class="row">
 
             <div class="input-field col s6">
-                <select id='access' name='access' placeholder='Accesos' required>
-                    <option disabled selected placeholder>Accesos</option>
-                    <option value="Interior Mina">Interior Mina</option>
-                    <option value="Fuera de la Mina">Fuera de la Mina</option>
-                    <option value="Ambos">Ambos</option>
+                <select id='access' name='access' placeholder='Accesos' required multiple>
+                    <option value="RA">Rajo</option>
+                    <option value="CI">Camino Industrial</option>
+                    <option value="RU">Ruta</option>
                 </select>
+                <label>Accesos</label>
             </div>
         </div>
         <div class="row">
@@ -198,6 +198,18 @@
         <a href="#!" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
     </div>
 </div>
+
+
+<div id="modalExists" class="modal">
+    <div class="modal-content">
+        <h4>Ya se ha solicitado una licencia.</h4>
+        <p>Ya existe una solicitud para el rut ingresado.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+    </div>
+</div>
+
 <div id="modalExists" class="modal">
     <div class="modal-content">
         <h4>Ya se ha solicitado una licencia.</h4>
@@ -237,18 +249,44 @@
         <p>Solicitar Renovación?.</p>
     </div>
     <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat renovar">Renovar</a><a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+    </div>
+</div>
+
+
+
+<!-- Modal Renovacion -->
+<div id="modalRenovacion" class="modal">
+    <div class="modal-content">
+        <h4>Solicitud de Renovación.</h4>
+        <p>Estimado (a):</p>
+        <p>Junto con saludar, informamos que para renovación de Licencia Interna, el conductor debe rendir un examen teórico en base al Reglamento Interno General de Conducción de Angloamerican.
+        <br /> Este examen puede ser realizado de lunes a viernes de 10:00 a 12:00hrs. Y de 15:00 a 16:00hr. <br />El examen se realiza en Avenida Las Condes 7700 Oficina 902 A. Oficinas de Explor-K.</p>
+        <p>Para solicitar hora para examen debe enviarnos un correo electrónico a licencias@explor-k.cl informando:</p>
+        <ul>
+            <li>Nombre del Conductor</li>
+            <li>Rut</li>
+            <li>Empresa</li>
+            <li>Fecha y hora en que asistirá a rendir el examen.</li>
+        </ul>
+        <p>Una vez aprobado el examen se entregará su licencia interna con fecha de vencimiento actualizada.
+        <br />Atte. <br />Departamento de Licencias Internas<br />Explor-K.</p>
+    </div>
+    <div class="modal-footer">
         <a href="#!" class="modal-close waves-effect waves-green btn-flat">Renovar</a><a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
     </div>
 </div>
 
+
 <!-- Modal Info TOS -->
 <div id="modalTOS" class="modal">
     <div class="modal-content">
-        <h4>Estoy De Acuerdo.</h4>
-        <ul>
-            <li>Yo <span id="sname" name="sname"></span>, soy el responsable de que los datos ingresados sean correctos.</li>
-            <li>Apartir del momento en que la solicitud es ingresada, el proceso toma aproximadamente 48h hábiles.</li>
-        </ul>
+        <h4>Nota de Responsabilidad.</h4>
+        <p>
+            Se establece que toda la información ingresada en este formulario es verídica y de exclusiva responsabilidad de quien la ingresa.
+            Cualquier error o cambio implicará una nueva revisión de antecedentes, lo que retrasará 48 horas más el plazo de una respuesta de su solicitud.
+        </p>
+        <p>Se informa que nuestro sistema de trabajo es de lunes a viernes en horario de 09:00hrs a 13:00hrs y de 14:00hrs a 18:00hrs, exceptuando feriados, sábado y domingo.</p>
     </div>
     <div class="modal-footer">
         <a href="#!" class="modal-close waves-effect waves-green btn-flat" name="okbtn" id="okbtn">Acepto</a><a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
@@ -290,7 +328,7 @@
                     <i name="forma1lt" id="forma1lt" class="material-icons circle red dotright">folder</i>
                 </a>
             </li>
-            <li class="collection-item avatar">
+            <!-->li class="collection-item avatar">
                 <i name="altamo" id="altamo" class="material-icons circle green">filter_hdr</i>
                 <span class="title">Alta Montaña</span>
                 <p>
@@ -300,7 +338,7 @@
                 <a href="#!" class="secondary-content">
                     <i name="altamolt" id="altamolt" class="material-icons circle green dotright">filter_hdr</i>
                 </a>
-            </li>
+            </li-->
             <li class="collection-item avatar">
                 <i name="licen" id="licen" class="material-icons circle red">chrome_reader_mode</i>
                 <span class="title">Licencia de Conducir</span>
@@ -312,7 +350,7 @@
                     <i name="licenlt" id="licenlt" class="material-icons circle red dotright">chrome_reader_mode</i>
                 </a>
             </li>
-            <li class="collection-item avatar" name="routesx" id="routesx">
+            <!--->li class="collection-item avatar" name="routesx" id="routesx">
                 <i name="rutasa" id="rutasa" class="material-icons circle green">commute</i>
                 <span class="title">Curso G21 G245</span>
                 <p>
@@ -322,7 +360,7 @@
                 <a href="#!" class="secondary-content">
                     <i name="routelt" id="routelt" class="material-icons circle grey lighten-1 dotright">commute</i>
                 </a>
-            </li>
+            </li-->
             <li class="collection-item avatar">
                 <i name="psicos" id="psicos" class="material-icons circle red">swap_calls</i>
                 <span class="title">Psicosensotécnico</span>
@@ -335,7 +373,7 @@
                 </a>
             </li>
         </ul>
-    * Ignorar en caso de estar todo correcto.
+        * Ignorar en caso de estar todo correcto.
     </div>
 
     <div class="modal-footer">
@@ -356,7 +394,9 @@
             var options = document.querySelectorAll('option');
       var instancesVeh = M.FormSelect.init(elemsVeh, options);
             var elemsRest = document.querySelectorAll('#restrictions');
-      var instancesRest = M.FormSelect.init(elemsRest);
+            var instancesRest = M.FormSelect.init(elemsRest);
+            var elemsAcc = document.querySelectorAll('#access');
+      var instancesAcc = M.FormSelect.init(elemsAcc);
       var elemsLic = document.querySelectorAll('#license');
       var instancesLic = M.FormSelect.init(elemsLic);
       var elemsAlic = document.querySelectorAll('#anglolicense');
@@ -372,7 +412,7 @@
             $("#specrest").val(" - ");
             $('#company').sm_select({ data:@Html.Raw(ViewData["selectComp"])});
             $('#chore').sm_select();
-            $('#access').sm_select();
+            
             $('.tooltipped').tooltip();
             $('.modal').modal();
             $("#specrest").val(" - ");
@@ -400,6 +440,11 @@
     $("#okbtn").on("click", function () {
         test2();
         testing();
+    });
+
+    $(".renovar").on("click", function () {
+        var instance = M.Modal.getInstance($("#modalRenovacion"));
+                    instance.open();
     });
 
     $("#searchrt").on("click", function () {
@@ -500,13 +545,13 @@
                 $('#forma1').removeClass('green').addClass('red');
                     $('#infoa1').text("Inexistente");
                 }
-                if (response.Alt == "True") {
+                /*if (response.Alt == "True") {
                     $('#altamo').removeClass('red').addClass('green');
                     $('#highmountm').text("Activo");
                 } else {
                     $('#altamo').removeClass('green').addClass('red');
                     $('#highmountm').text("Inexistente");
-                }
+                }*/
                 if (response.Lic == "True") {
                     $('#licen').removeClass('red').addClass('green');
                     $('#licensem').text("Activo");
@@ -514,16 +559,16 @@
                     $('#licen').removeClass('green').addClass('red');
                     $('#licensem').text("Vencida o Invalidada");
                 }
-                $('#rutasa').show();
-                $('#routesm').show();
-                $('#routesx').show();
-                if (response.G21 == "True") {
+                //$('#rutasa').show();
+                //$('#routesm').show();
+                //$('#routesx').show();
+                /*if (response.G21 == "True") {
                     $('#rutasa').removeClass('red').addClass('green');
                     $('#routesm').text("Activo");
                 } else {
                     $('#rutasa').removeClass('green').addClass('red');
                     $('#routesm').text("Inexistente");
-                }
+                }*/
                 if (response.Psi == "True") {
                     $('#psicos').removeClass('red').addClass('green');
                     $('#psicom').text("Activo");
@@ -531,7 +576,7 @@
                     $('#psicos').removeClass('green').addClass('red');
                     $('#psicom').text("Vencido o Invalidado");
                 }
-                if (response.Aon == "True" && response.Alt == "True" && response.Lic == "True" && response.G21 == "True" && response.Psi == "True") {
+                if (response.Aon == "True" && response.Lic == "True" && response.Psi == "True") {
                     var instance = M.Modal.getInstance($("#modalErrors"));
                     instance.open();
                     sendData();
@@ -552,13 +597,13 @@
                     $('#forma1').removeClass('green').addClass('red');
                     $('#infoa1').text("Inexistente");
                 }
-                if (response.Alt == "True") {
+                /*if (response.Alt == "True") {
                     $('#altamo').removeClass('red').addClass('green');
                     $('#highmountm').text("Activo");
                 } else {
                     $('#altamo').removeClass('green').addClass('red');
                     $('#highmountm').text("Inexistente");
-                }
+                }*/
                 if (response.Lic == "True") {
                     $('#licen').removeClass('red').addClass('green');
                     $('#licensem').text("Activo");
@@ -577,7 +622,7 @@
                     $('#psicos').removeClass('green').addClass('red');
                     $('#psicom').text("Vencido o Invalidado");
                 }
-                if (response.Aon == "True" && response.Alt == "True" && response.Lic == "True" && response.Psi == "True") {
+                if (response.Aon == "True" && response.Lic == "True" && response.Psi == "True") {
                     var instance = M.Modal.getInstance($("#modalErrors"));
                     instance.open();
                     sendData();
@@ -598,13 +643,14 @@
                     $('#forma1').removeClass('green').addClass('red');
                     $('#infoa1').text("Inexistente");
                 }
-                if (response.Alt == "True") {
+
+                /*if (response.Alt == "True") {
                     $('#altamo').removeClass('red').addClass('green');
                     $('#highmountm').text("Activo");
                 } else {
                     $('#altamo').removeClass('green').addClass('red');
                     $('#highmountm').text("Inexistente");
-                }
+                }*/
                 if (response.Lic == "True") {
                     $('#licen').removeClass('red').addClass('green');
                     $('#licensem').text("Activo");
@@ -631,13 +677,13 @@
                     $('#forma1lt').removeClass('green').addClass('red');
                     $('#infoa1lt').text("Inexistente");
                 }
-                if (response.Altlt == "True") {
+                /*if (response.Altlt == "True") {
                     $('#altamolt').removeClass('red').addClass('green');
                     $('#highmountmlt').text("Activo");
                 } else {
                     $('#altamolt').removeClass('green').addClass('red');
                     $('#highmountmlt').text("Inexistente");
-                }
+                }*/
                 if (response.Liclt == "True") {
                     $('#licenlt').removeClass('red').addClass('green');
                     $('#licensemlt').text("Activo");
@@ -656,7 +702,7 @@
                     $('#psicoslt').removeClass('green').addClass('red');
                     $('#psicomlt').text("Vencido o Invalidado");
                 }
-                if (response.Aonlt == "True" && response.Altlt == "True" && response.Liclt == "True" && response.Psilt == "True" && response.Aon == "True" && response.Alt == "True" && response.Lic == "True" && response.G21 == "True" && response.Psi == "True") {
+                if (response.Aonlt == "True" && response.Liclt == "True" && response.Psilt == "True" && response.Aon == "True" && response.Lic == "True" && response.Psi == "True") {
                     var instance = M.Modal.getInstance($("#modalErrors"));
                     instance.open();
                     sendData();
@@ -665,12 +711,12 @@
                     instance.open();
                 }
             }
-            
-            
+
+
         });
 
 
-        
+
     }
 
 
